@@ -1,0 +1,54 @@
+{
+  "name": "storage-awesome",
+  "version": "0.0.0",
+  "description": "一个简单好用的storage方法库",
+  "main": "dist/storage-awesome.min.js",
+  "scripts": {
+    "watch": "npm run clean-lib && tsc --watch",
+    "build": "npm run build-lib && npm run build-dist && npm run copy-type && npm run create-types",
+    "build-lib": "npm run clean-lib && tsc && npm run babel",
+    "build-dist": "npm run clean-dist && webpack",
+    "copy-type": "fe-mv ./lib/index.d.ts ./dist/calc-easy.min.d.ts",
+    "create-types": "tsc --build tsconfigDeclarationOnly.json",
+    "babel": "babel src --config-file babel.config.json --extensions .js,.jsx,.ts,.tsx --out-dir lib",
+    "clean": "npm run clean-lib && npm run clean-dist",
+    "clean-lib": "rimraf lib",
+    "clean-dist": "rimraf dist",
+    "rise": "npm link"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sp0re/storage-awesome"
+  },
+  "homepage": "https://github.com/sp0re/storage-awesome",
+  "keywords": [
+    "storage"
+  ],
+  "author": "sp0re",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.14.5",
+    "@babel/core": "^7.14.6",
+    "@babel/plugin-transform-runtime": "^7.14.5",
+    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-typescript": "^7.14.5",
+    "@types/node": "^16.3.1",
+    "babel-loader": "^8.2.2",
+    "babel-preset-minify": "^0.5.1",
+    "compression-webpack-plugin": "^5.0.2",
+    "fe-mv": "^1.0.3",
+    "rimraf": "^3.0.2",
+    "ts-loader": "^8.1.0",
+    "tslib": "^2.3.0",
+    "typescript": "^4.3.4",
+    "webpack": "^4.46.0",
+    "webpack-cli": "^4.7.2"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.14.6",
+    "@babel/runtime-corejs3": "^7.14.7",
+    "core-js": "^3.15.2"
+  },
+  "files": [
+  ]
+}

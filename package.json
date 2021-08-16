@@ -1,14 +1,14 @@
 {
   "name": "storage-awesome",
   "version": "0.0.0",
-  "description": "一个简单好用的storage方法库",
+  "description": "一个简单好用的浏览器端storage方法库",
   "main": "dist/storage-awesome.min.js",
   "scripts": {
     "watch": "npm run clean-lib && tsc --watch",
     "build": "npm run build-lib && npm run build-dist && npm run copy-type && npm run create-types",
     "build-lib": "npm run clean-lib && tsc && npm run babel",
     "build-dist": "npm run clean-dist && webpack",
-    "copy-type": "fe-mv ./lib/index.d.ts ./dist/calc-easy.min.d.ts",
+    "copy-type": "fe-mv ./lib/index.d.ts ./dist/storage-awesome.min.d.ts",
     "create-types": "tsc --build tsconfigDeclarationOnly.json",
     "babel": "babel src --config-file babel.config.json --extensions .js,.jsx,.ts,.tsx --out-dir lib",
     "clean": "npm run clean-lib && npm run clean-dist",
@@ -49,6 +49,5 @@
     "@babel/runtime-corejs3": "^7.14.7",
     "core-js": "^3.15.2"
   },
-  "files": [
-  ]
+  "files": []
 }

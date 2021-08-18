@@ -1,5 +1,4 @@
 
-
 export interface factoryReturn {
     storageObj: Storage,
     globalName: string,
@@ -57,7 +56,43 @@ export interface factoryFunc {
 }
 
 const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {
+    let getData:any = () => {
+        return JSON.parse(storageObj.getItem(globalName))
+    }
+    let setData:any = (data:any) => {
+        storageObj.setItem(globalName, JSON.stringify(data))
+    }
+    let init:any = () => {
+        !storageObj.getItem(globalName) && setData({})
+    }
+    let O: factoryReturn = {
+        storageObj: storageObj,
+        globalName: globalName,
 
+        has: (arg: string | [key: string]) => {
+            return true
+        },
+
+        get: (arg: string | [key: string] | null) => {
+            
+        },
+
+        set: (obj: { [key: string]: any }, time?: number ) => {
+            return O
+        },
+
+        delete: (arg: string | [key: string]) => {
+            return O
+
+        },
+
+        clear: (arg: null) => {
+            return O
+        }
+    }
+
+    init()
+    return O
 }
 
 export default storageFactory

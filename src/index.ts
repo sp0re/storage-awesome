@@ -73,13 +73,16 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             let data = getData();
             if(typeof arg === 'string') {                
                 let flag = false;
-                for (let key in data) {
-                    if (key === arg) {
-                        flag = true
-                        break
-                    } else {
-                        continue
-                    }
+                // for (let key in data) {
+                //     if (key === arg) {
+                //         flag = true
+                //         break
+                //     } else {
+                //         continue
+                //     }
+                // }
+                if(data[arg]) {
+                    flag = true
                 }
                 return flag
             }
@@ -87,14 +90,17 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                 let result:any = {};   
                 arg.forEach((n, i) => {
                     result[n] = false
-                    for (let key in data) {
-                        if(n === key) {
-                            result[n] = true
-                            break
-                        } else {
-                            continue
-                        }
-                    }             
+                    // for (let key in data) {
+                    //     if(n === key) {
+                    //         result[n] = true
+                    //         break
+                    //     } else {
+                    //         continue
+                    //     }
+                    // }
+                    if(data[n]) {
+                        result[n] = true
+                    }
                 })
                 return result
             }
@@ -105,6 +111,11 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         },
 
         set: (obj: { [key: string]: any }, time?: number ) => {
+            let data = {
+                ...getData(),
+                ...obj
+            }
+            setData(data)
             return O
         },
 

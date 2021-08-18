@@ -70,7 +70,34 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         globalName: globalName,
 
         has: (arg: string | [key: string]) => {
-            return true
+            let data = getData();
+            if(typeof arg === 'string') {                
+                let flag = false;
+                for (let key in data) {
+                    if (key === arg) {
+                        flag = true
+                        break
+                    } else {
+                        continue
+                    }
+                }
+                return flag
+            }
+            if(Array.isArray(arg)) {
+                let result:any = {};   
+                arg.forEach((n, i) => {
+                    result[n] = false
+                    for (let key in data) {
+                        if(n === key) {
+                            result[n] = true
+                            break
+                        } else {
+                            continue
+                        }
+                    }             
+                })
+                return result
+            }
         },
 
         get: (arg: string | [key: string] | null) => {

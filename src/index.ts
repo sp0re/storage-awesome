@@ -15,7 +15,7 @@ export interface hasFunc1 {
     (key: string): boolean
 }
 export interface hasFunc2 {
-    (keys: [key: string]): { [key: string]: boolean }
+    (keys: [key: string]): boolean
 }
 ////
 export type getFunc = getFunc1 | getFunc2 | getFunc3
@@ -71,39 +71,23 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
         has: (arg: string | [key: string]) => {
             let data = getData();
+            let flag = false;
             if(typeof arg === 'string') {                
-                let flag = false;
-                // for (let key in data) {
-                //     if (key === arg) {
-                //         flag = true
-                //         break
-                //     } else {
-                //         continue
-                //     }
-                // }
                 if(data[arg]) {
                     flag = true
-                }
-                return flag
+                }                
             }
             if(Array.isArray(arg)) {
-                let result:any = {};   
-                arg.forEach((n, i) => {
-                    result[n] = false
-                    // for (let key in data) {
-                    //     if(n === key) {
-                    //         result[n] = true
-                    //         break
-                    //     } else {
-                    //         continue
-                    //     }
-                    // }
-                    if(data[n]) {
-                        result[n] = true
+                flag = true
+                for(let i=0, len=arg.length; i<len; i++) {
+                    let n = arg[i];
+                    if(!data[n]){
+                        flag = false
+                        break
                     }
-                })
-                return result
+                }
             }
+            return flag
         },
 
         get: (arg: string | [key: string] | null) => {

@@ -52,7 +52,7 @@ export interface clearFunc {
 
 ////
 export interface factoryFunc {
-    (storageObj: Storage, globalName?: string): factoryReturn
+    (storageObj?: Storage, globalName?: string): factoryReturn
 }
 
 const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {
@@ -143,4 +143,8 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 }
 
 export default storageFactory
-// export {storageFactory}
+
+const sessionStorage:factoryReturn = storageFactory(window.sessionStorage)
+const localStorage:factoryReturn = storageFactory(window.localStorage)
+
+export { sessionStorage, localStorage }

@@ -91,7 +91,21 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         },
 
         get: (arg: string | [key: string] | null) => {
-            
+            let data = getData();
+            if(!arg) {
+                return data
+            }
+            if(typeof arg === 'string') {
+                return data[arg]        
+            }
+            if(Array.isArray(arg)) {
+                let result: { [key: string]: any } = {}
+                for(let i=0, len=arg.length; i<len; i++) {
+                    let n = arg[i];
+                    result[n] = data[n]
+                }
+                return result
+            }
         },
 
         set: (obj: { [key: string]: any }, time?: number ) => {
@@ -104,11 +118,22 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         },
 
         delete: (arg: string | [key: string]) => {
+            let data = getData();
+            if(typeof arg === 'string') {   
+                delete data[arg]            
+            }
+            if(Array.isArray(arg)) {
+                for(let i=0, len=arg.length; i<len; i++) {
+                    let n = arg[i];
+                    delete data[n]  
+                }
+            }
+            setData(data)
             return O
-
         },
 
         clear: (arg: null) => {
+            setData({})
             return O
         }
     }

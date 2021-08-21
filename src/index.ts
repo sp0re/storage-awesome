@@ -144,7 +144,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
 export default storageFactory
 
-const sessionStorage:factoryReturn = storageFactory(window.sessionStorage)
-const localStorage:factoryReturn = storageFactory(window.localStorage)
+const SessionStorage:factoryReturn = storageFactory(window.sessionStorage)
+const LocalStorage:factoryReturn = storageFactory(window.localStorage)
 
-export { sessionStorage, localStorage }
+export { SessionStorage, LocalStorage }

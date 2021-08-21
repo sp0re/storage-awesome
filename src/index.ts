@@ -140,5 +140,7 @@ export default storageFactory
 
 const SessionStorage:factoryReturn = storageFactory(window.sessionStorage)
 const LocalStorage:factoryReturn = storageFactory(window.localStorage)
+const SS:factoryReturn = SessionStorage
+const LS:factoryReturn = LocalStorage
 
-export { SessionStorage, LocalStorage }
+export { SessionStorage, LocalStorage, SS, LS }

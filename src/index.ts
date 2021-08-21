@@ -9,25 +9,21 @@ export interface factoryReturn {
     clear: clearFunc,
 }
 ////
-export type hasFunc = hasFunc1 | hasFunc2
-
-export interface hasFunc1 {
+export interface hasFunc {
     (key: string): boolean
 }
-export interface hasFunc2 {
-    (keys: [key: string]): boolean
+export interface hasFunc {
+    (keys: string[]): boolean
 }
 ////
-export type getFunc = getFunc1 | getFunc2 | getFunc3
-
-export interface getFunc1 {
+export interface getFunc {
     (key: string): any
 }
-export interface getFunc2 {
-    (keys: [key: string]): { [key: string]: any }
+export interface getFunc {
+    (keys: string[]): { [key: string]: any }
 }
-export interface getFunc3 {
-    (key: null): { [key: string]: any }
+export interface getFunc {
+    (key: void): { [key: string]: any }
 }
 ////
 export interface setFunc {
@@ -37,17 +33,15 @@ export interface setFunc {
     ) : factoryReturn
 }
 ////
-export type deleteFunc = deleteFunc1 | deleteFunc2
-
-export interface deleteFunc1 {
+export interface deleteFunc {
     (key: string): factoryReturn
 }
-export interface deleteFunc2 {
-    (keys: [key: string]): factoryReturn
+export interface deleteFunc {
+    (keys: string[]): factoryReturn
 }
 ////
 export interface clearFunc {
-    (key: null): factoryReturn
+    (key: void): factoryReturn
 }
 
 ////
@@ -69,7 +63,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         storageObj: storageObj,
         globalName: globalName,
 
-        has: (arg: string | [key: string]) => {
+        has: (arg: string | string[]) => {
             let data = getData();
             let flag = false;
             if(typeof arg === 'string') {                
@@ -90,7 +84,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             return flag
         },
 
-        get: (arg: string | [key: string] | null) => {
+        get: (arg: string | string[] | void) => {
             let data = getData();
             if(!arg) {
                 return data
@@ -117,7 +111,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             return O
         },
 
-        delete: (arg: string | [key: string]) => {
+        delete: (arg: string | string[]) => {
             let data = getData();
             if(typeof arg === 'string') {   
                 delete data[arg]            
@@ -132,7 +126,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             return O
         },
 
-        clear: (arg: null) => {
+        clear: (arg: void) => {
             setData({})
             return O
         }

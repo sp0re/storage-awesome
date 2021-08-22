@@ -32,7 +32,7 @@ export interface getFunc {
 export interface setFunc {
     (
         obj: { [key: string]: any },
-        time?: number
+        minute?: number
     ) : factoryReturn
 }
 ////
@@ -52,12 +52,27 @@ export interface factoryFunc {
     (storageObj?: Storage, globalName?: string): factoryReturn
 }
 
-const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {
+const TIME = '-_-time-_-'
+
+const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {    
     let getData:any = () => {
         return JSON.parse(storageObj.getItem(globalName))
     }
     let setData:any = (data:any) => {
         storageObj.setItem(globalName, JSON.stringify(data))
+    }
+    let validateTime:any = (key: string) => {        
+        if(globalName.indexOf(TIME) >= 0) {
+            return true
+        }
+        let Time = storageFactory(storageObj, globalName + TIME)
+        let flag = true
+        if(Time.has(key) && (new Date()).getTime() > Time.get(key)) {
+            flag = false
+            O.delete(key)
+            Time.delete(key)
+        }
+        return flag
     }
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
@@ -70,7 +85,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             let data = getData();
             let flag = false;
             if(typeof arg === 'string') {                
-                if(data[arg]) {
+                if(data[arg] && validateTime(arg)) {
                     flag = true
                 }                
             }
@@ -78,6 +93,10 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                 flag = true
                 for(let i=0, len=arg.length; i<len; i++) {
                     let n = arg[i];
+                    if(!validateTime(n)){
+                        flag = false
+                        break
+                    }
                     if(!data[n]){
                         flag = false
                         break
@@ -114,12 +133,21 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             }
         },
 
-        set: (obj: { [key: string]: any }, time?: number ) => {
+        set: (obj: { [key: string]: any }, minute?: number ) => {
             let data = {
                 ...getData(),
                 ...obj
             }
             setData(data)
+            if(minute) {
+                let Time = storageFactory(storageObj, globalName + TIME)
+                let time: number = (new Date()).getTime() + minute * 60 * 1000
+                let result: { [key: string]: number } = {}
+                for(let key in obj) {
+                    result[key] = time
+                }
+                Time.set(result)
+            }
             return O
         },
 

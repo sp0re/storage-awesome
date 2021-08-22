@@ -25,6 +25,9 @@ export interface getFunc {
 export interface getFunc {
     (key: void): { [key: string]: any }
 }
+export interface getFunc {
+    (search: (key: string, value: any) => boolean): { [key: string]: any }
+}
 ////
 export interface setFunc {
     (
@@ -84,7 +87,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             return flag
         },
 
-        get: (arg: string | string[] | void) => {
+        get: (arg: string | string[] | void | ((key: string, value: any) => boolean)) => {
             let data = getData();
             if(!arg) {
                 return data
@@ -99,6 +102,15 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                     result[n] = data[n]
                 }
                 return result
+            }
+            if(typeof arg === 'function') {
+                let result: { [key: string]: any } = {}
+                for(let key in data) {
+                    if(arg(key, data[key])) {
+                        result[key] = data[key]
+                    }
+                }
+                return result      
             }
         },
 

@@ -32,7 +32,7 @@ export interface getFunc {
 export interface setFunc {
     (
         obj: { [key: string]: any },
-        time?: number
+        minute?: number
     ) : factoryReturn
 }
 ////
@@ -114,7 +114,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             }
         },
 
-        set: (obj: { [key: string]: any }, time?: number ) => {
+        set: (obj: { [key: string]: any }, minute?: number ) => {
             let data = {
                 ...getData(),
                 ...obj

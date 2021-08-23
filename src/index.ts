@@ -52,12 +52,25 @@ export interface factoryFunc {
     (storageObj?: Storage, globalName?: string): factoryReturn
 }
 
+const ENDTIME:string = '-_-endtime-_-'
+
 const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {
-    let getData:any = () => {
-        return JSON.parse(storageObj.getItem(globalName))
+    let getData:any = (name:string = globalName) => {
+        return JSON.parse(storageObj.getItem(name))
     }
-    let setData:any = (data:any) => {
-        storageObj.setItem(globalName, JSON.stringify(data))
+    let setData:any = (data:any, name:string = globalName) => {
+        storageObj.setItem(name, JSON.stringify(data))
+    }
+    let validateTime:any = (key: string) => {  
+        let timeData = getData(globalName + ENDTIME)
+        let flag = true
+        if(timeData[key] && (new Date()).getTime() > timeData[key]) {
+            flag = false
+            O.delete(key)
+            delete timeData[key]
+            setData(timeData, globalName + ENDTIME)
+        }
+        return flag
     }
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
@@ -70,7 +83,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             let data = getData();
             let flag = false;
             if(typeof arg === 'string') {                
-                if(data[arg]) {
+                if(data[arg] && validateTime(arg)) {
                     flag = true
                 }                
             }
@@ -78,6 +91,10 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                 flag = true
                 for(let i=0, len=arg.length; i<len; i++) {
                     let n = arg[i];
+                    if(!validateTime(n)){
+                        flag = false
+                        break
+                    }
                     if(!data[n]){
                         flag = false
                         break
@@ -120,6 +137,14 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                 ...obj
             }
             setData(data)
+            if(minute) {
+                let endTime: number = (new Date()).getTime() + minute * 60 * 1000
+                let result: { [key: string]: number } = {}
+                for(let key in obj) {
+                    result[key] = endTime
+                }
+                setData(result, globalName + ENDTIME)            
+            }
             return O
         },
 

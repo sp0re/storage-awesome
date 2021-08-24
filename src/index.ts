@@ -74,6 +74,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
     }
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
+        !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
     }
     let O: factoryReturn = {
         storageObj: storageObj,
@@ -138,12 +139,14 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             }
             setData(data)
             if(minute) {
-                let endTime: number = (new Date()).getTime() + minute * 60 * 1000
-                let result: { [key: string]: number } = {}
-                for(let key in obj) {
-                    result[key] = endTime
-                }
-                setData(result, globalName + ENDTIME)            
+                setTimeout(()=>{
+                    let endTime: number = (new Date()).getTime() + minute * 60 * 1000
+                    let result: { [key: string]: number } = {}
+                    for(let key in obj) {
+                        result[key] = endTime
+                    }
+                    setData(result, globalName + ENDTIME)    
+                }, 0)                        
             }
             return O
         },

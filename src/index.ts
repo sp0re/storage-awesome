@@ -72,6 +72,13 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         }
         return flag
     }
+    let deleteTime:any = (key: string) => {
+        setTimeout(()=>{
+            let timeData = getData(globalName + ENDTIME)
+            delete timeData[key]
+            setData(timeData, globalName + ENDTIME)
+        }, 0)         
+    }
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
         !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
@@ -154,12 +161,14 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         delete: (arg: string | string[]) => {
             let data = getData();
             if(typeof arg === 'string') {   
-                delete data[arg]            
+                delete data[arg]
+                deleteTime(arg)
             }
             if(Array.isArray(arg)) {
                 for(let i=0, len=arg.length; i<len; i++) {
                     let n = arg[i];
-                    delete data[n]  
+                    delete data[n]
+                    deleteTime(n)  
                 }
             }
             setData(data)
@@ -168,6 +177,9 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
         clear: (arg: void) => {
             setData({})
+            setTimeout(()=>{
+                setData({}, globalName + ENDTIME)
+            }, 0)
             return O
         }
     }

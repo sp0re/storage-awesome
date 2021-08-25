@@ -114,24 +114,28 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
         get: (arg: string | string[] | void | ((key: string, value: any) => boolean)) => {
             let data = getData();
+            let timeData = getData(globalName + ENDTIME);
             if(!arg) {
-                return data
+                for(let key in timeData) {
+                    validateTime(key)
+                }
+                return getData()
             }
             if(typeof arg === 'string') {
-                return data[arg]        
+                return validateTime(arg) ? data[arg] : null
             }
             if(Array.isArray(arg)) {
                 let result: { [key: string]: any } = {}
                 for(let i=0, len=arg.length; i<len; i++) {
                     let n = arg[i];
-                    result[n] = data[n]
+                    result[n] = validateTime(n) ? data[n] : null
                 }
                 return result
             }
             if(typeof arg === 'function') {
                 let result: { [key: string]: any } = {}
                 for(let key in data) {
-                    if(arg(key, data[key])) {
+                    if(arg(key, data[key]) && validateTime(key)) {
                         result[key] = data[key]
                     }
                 }

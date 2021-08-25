@@ -22,7 +22,10 @@
   },
   "homepage": "https://github.com/sp0re/storage-awesome",
   "keywords": [
-    "storage"
+    "storage",
+    "sessionStorage",
+    "localStorage",
+    "data"
   ],
   "author": "sp0re",
   "license": "MIT",

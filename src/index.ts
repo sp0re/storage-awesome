@@ -167,7 +167,9 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             if(minute) {
                 setTimeout(()=>{
                     let endTime: number = (new Date()).getTime() + minute * 60 * 1000
-                    let result: { [key: string]: number } = {}
+                    let result: { [key: string]: number } = {
+                        ...getData(globalName + ENDTIME)
+                    }
                     for(let key in obj) {
                         result[key] = endTime
                     }

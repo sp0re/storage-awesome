@@ -1,7 +1,7 @@
 
 export interface factoryReturn {
-    storageObj: Storage,
-    globalName: string,
+    _storageObj: Storage,
+    _globalName: string,
     has: hasFunc,
     get: getFunc,
     set: setFunc,
@@ -63,11 +63,13 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
     }
     let validateTime:any = (key: string) => {  
         let timeData = getData(globalName + ENDTIME)
+        let data = getData();
         let flag = true
         if(timeData[key] && (new Date()).getTime() > timeData[key]) {
             flag = false
-            O.delete(key)
+            delete data[key]
             delete timeData[key]
+            setData(data)
             setData(timeData, globalName + ENDTIME)
         }
         return flag
@@ -79,13 +81,26 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             setData(timeData, globalName + ENDTIME)
         }, 0)         
     }
+    let checkTime:any = () => {
+        // setTimeout(()=>{
+            let timeData = getData(globalName + ENDTIME)
+            let data = getData();
+            for(let key in timeData) {
+                validateTime(key)
+                if(!data[key]) {
+                    deleteTime(key)
+                }
+            }
+        // }, 0)
+    }
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
         !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
+        checkTime()
     }
     let O: factoryReturn = {
-        storageObj: storageObj,
-        globalName: globalName,
+        _storageObj: storageObj,
+        _globalName: globalName,
 
         has: (arg: string | string[]) => {
             let data = getData();
@@ -188,7 +203,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         }
     }
 
-    init()
+    init()    
     return O
 }
 

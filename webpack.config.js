@@ -12,8 +12,8 @@ module.exports = {
     entry: './index.ts',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'calc-easy.min.js',
-        library: 'calcEasy',
+        filename: 'storage-awesome.min.js',
+        library: 'storage',
         libraryTarget: 'umd',
         globalObject: 'this'
     },

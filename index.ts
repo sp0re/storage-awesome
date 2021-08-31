@@ -1,3 +1,8 @@
-//@ts-nocheck
-const calc = require('./src/index');
-module.exports = calc.default;
+// @ts-nocheck
+const O = require('./src/index');
+// module.exports = {
+//     ...O,
+//     storageFactory: O.default
+// };
+module.exports = O
+module.exports.storageFactory = O.default

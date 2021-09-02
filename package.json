@@ -1,6 +1,6 @@
 {
   "name": "storage-awesome",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "一个简单好用的浏览器端storage方法库",
   "main": "dist/storage-awesome.min.js",
   "scripts": {
@@ -52,5 +52,5 @@
     "@babel/runtime-corejs3": "^7.14.7",
     "core-js": "^3.15.2"
   },
-  "files": []
+  "files": ["dist"]
 }

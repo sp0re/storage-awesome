@@ -102,45 +102,109 @@ Storage对象，可以是window.sessionStorage或者window.localStorage，或者
 		<th>入参</th>
 		<th>入参类型</th>
 		<th>返回值</th>
-		<th>示例</th>
 	</tr>
 	<tr>
-		<td rowspan="2">has</td>
+		<td rowspan="4">has</td>
 		<td>查询某key在该storage是否有值</td>
 		<td>key名</td>
 		<td>string</td>
 		<td>boolean</td>
-		<td>SS.has('a') </br>// 返回：true </td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.has('a') // 返回：true</td>
 	</tr>
 	<tr>
 		<td>查询多个key在该storage是否有值，全部为true时才返回true</td>
 		<td>存放key名的数组</td>
 		<td>string[]</td>
 		<td>boolean</td>
-		<td>SS.has(['a', 'no']) </br>// 返回：false</td>
 	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.has(['a', 'no']) // 返回：false</td>
+	</tr>
+	<tr>
+		<td rowspan="8">get</td>
+		<td>获取某key在该storage的值</td>
+		<td>key名</td>
+		<td>string</td>
+		<td>any，该key对应的值</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.get('a') // 返回：123</td>
+	</tr>
+	<tr>
+		<td>获取多个key在该storage的值，以键值对的形式返回</td>
+		<td>存放key名的数组</td>
+		<td>string[]</td>
+		<td>json对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.get(['a', 'b']) // 返回：{a: 123, b: 456}</td>
+	</tr>
+	<tr>
+		<td>获取该storage保存的所有值，以键值对的形式返回</td>
+		<td>无</td>
+		<td>void</td>
+		<td>json对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.get() // 返回：{a: 123, b: 456, c: 789}</td>
+	</tr>
+	<tr>
+		<td>获取符合查询条件的值，以键值对的形式返回</td>
+		<td>查询函数</td>
+		<td>(key: string, value: any) => boolean</td>
+		<td>json对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.get((key, value)=> value > 700) // 返回：{c: 789}</td>
+	</tr>
+	<tr>
+		<td rowspan="2">set</td>
+		<td>向该storage存入键值对</td>
+		<td>入参1：json对象；入参2：超时时间（分钟），非必填</td>
+		<td>obj: { [key: string]: any }, minute?: number</td>
+		<td>返回该storage对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.set({a: 123, b: 456}, 60 * 24).set({c: 789}) // 返回：SS</td>
+	</tr>
+	<tr>
+		<td rowspan="4">delete</td>
+		<td>删除该storage中的某键值对</td>
+		<td>key名</td>
+		<td>string</td>
+		<td>返回该storage对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.delete('a').delete('b') // 返回：SS</td>
+	</tr>
+	<tr>
+		<td>删除该storage中的多个键值对</td>
+		<td>存放key名的数组</td>
+		<td>string[]</td>
+		<td>返回该storage对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.delete(['a', 'b']) // 返回：SS</td>
+	</tr>
+	<tr>
+		<td rowspan="2">clear</td>
+		<td>清空该storage的存储</td>
+		<td>无</td>
+		<td>void</td>
+		<td>返回该storage对象</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.clear() // 返回：SS</td>
 </table>
 
 
 
-## 当前版本包大小：
-min：9.47kb  
-gzip：3.82kb
+## 当前版本包大小（取自webpack打包数据）：
+min：3.78kb  
+gzip：1.41kb
 
 
 ## TODO:
-- 增加校验，处理各种边界问题，处理错误异常
-- 命令行调用
-- 增加独立的config函数
-
-## 更新日志：
-- **20210711（version 0.0.2）：**
-	* 调整项目配置，压缩代码（目前min包是17.7kb，CDN版gzip压缩后是7kb
-	* 支持node环境和浏览器script标签引入的形式
-- **20210717（version 0.0.4）：**
-	* 优化配置，优化代码，减少产出体积（目前min包大小约是9.16kb，gzip压缩后约3.76kb
-- **20210731（version 0.0.5）：**
-	* 支持百分号运算
-	* 优化文档
-- **20210803（version 0.0.6）：**
-	* 修改打包配置，修复ie11报错
+- 优化除虫

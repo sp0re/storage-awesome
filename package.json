@@ -1,6 +1,6 @@
 {
   "name": "storage-awesome",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "一个简单好用的浏览器端storage方法库",
   "main": "dist/storage-awesome.min.js",
   "scripts": {
@@ -25,7 +25,10 @@
     "storage",
     "sessionStorage",
     "localStorage",
-    "data"
+    "data",
+    "存储",
+    "前端存储",
+    "超时时间"
   ],
   "author": "sp0re",
   "license": "MIT",

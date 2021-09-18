@@ -7,6 +7,7 @@ export interface factoryReturn {
     set: setFunc,
     delete: deleteFunc,
     clear: clearFunc,
+    isEmpty: isEmptyFunc
 }
 ////
 export interface hasFunc {
@@ -45,6 +46,10 @@ export interface deleteFunc {
 ////
 export interface clearFunc {
     (key: void): factoryReturn
+}
+////
+export interface isEmptyFunc {
+    (key: void): boolean
 }
 
 ////
@@ -202,7 +207,15 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                 setData({}, globalName + ENDTIME)
             }, 0)
             return O
-        }
+        },
+
+        isEmpty: (arg: void) => {
+            let data = getData();
+            if(JSON.stringify(data) === '{}') {
+                return true
+            }
+            return false
+        },
     }
 
     init()    

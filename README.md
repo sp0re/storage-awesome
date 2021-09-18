@@ -197,14 +197,30 @@ Storage对象，可以是window.sessionStorage或者window.localStorage，或者
 	</tr>
 	<tr>
 		<td colspan="4"><b>示例：</b>SS.clear() // 返回：SS</td>
+	</tr>
+	<tr>
+		<td rowspan="2">isEmpty</td>
+		<td>判断该storage是否无数据</td>
+		<td>无</td>
+		<td>void</td>
+		<td>boolean</td>
+	</tr>
+	<tr>
+		<td colspan="4"><b>示例：</b>SS.isEmpty() // 返回：false</td>
+	</tr>
 </table>
 
 
 
 ## 当前版本包大小（取自webpack打包数据）：
-min：3.78kb  
-gzip：1.41kb
+min：3.84kb  
+gzip：1.43kb
 
 
 ## TODO:
 - 优化除虫
+- 优化工厂方法storageFactory的使用，调整第二个入参逻辑
+
+## 更新日志：
+- **20210918（version 1.0.1）：**
+	* 实例方法新增isEmpty，用以判断该storage是否无数据。

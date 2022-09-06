@@ -54,12 +54,16 @@ export interface isEmptyFunc {
 
 ////
 export interface factoryFunc {
-    (storageObj?: Storage, globalName?: string): factoryReturn
+    (storageObj: Storage, globalName: string): factoryReturn
 }
 
 const ENDTIME:string = '-_-endtime-_-'
 
-const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string = "storageAwesome") => {
+const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string) => {
+    if(!globalName) {
+        throw 'storageFactory need a second param'
+    }
+
     let getData:any = (name:string = globalName) => {
         return JSON.parse(storageObj.getItem(name))
     }
@@ -224,8 +228,8 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
 export default storageFactory
 
-const SessionStorage:factoryReturn = storageFactory(window.sessionStorage)
-const LocalStorage:factoryReturn = storageFactory(window.localStorage)
+const SessionStorage:factoryReturn = storageFactory(window.sessionStorage, "storageAwesome")
+const LocalStorage:factoryReturn = storageFactory(window.localStorage, "storageAwesome")
 const SS:factoryReturn = SessionStorage
 const LS:factoryReturn = LocalStorage
 

@@ -106,15 +106,13 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         // }, 0)
     }
     let init:any = () => {
-        !storageObj.getItem(globalName) && setData({})
-        !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
-
         if(!storageObj.getItem(globalName + KEY)) {
             storageObj.setItem(globalName + KEY, Code.makeKey())
             setData({})
             setData({}, globalName + ENDTIME)
         }
-
+        !storageObj.getItem(globalName) && setData({})
+        !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
         checkTime()
     }
     let O: factoryReturn = {
@@ -223,7 +221,11 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
             return O
         },
 
-        isEmpty: (arg: void) => {
+        isEmpty: (arg: void) => {            
+            let timeData = getData(globalName + ENDTIME);
+            for(let key in timeData) {
+                validateTime(key)
+            }
             let data = getData();
             if(JSON.stringify(data) === '{}') {
                 return true

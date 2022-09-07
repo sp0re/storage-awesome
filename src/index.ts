@@ -65,10 +65,15 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
     }
 
     let getData:any = (name:string = globalName) => {
-        return JSON.parse(storageObj.getItem(name))
+        // return JSON.parse(storageObj.getItem(name))
+        return JSON.parse(Code.decode(storageObj.getItem(name)))
     }
     let setData:any = (data:any, name:string = globalName) => {
-        storageObj.setItem(name, JSON.stringify(data))
+        // console.log(JSON.stringify(data), 111)
+        // console.log(Code.encode(JSON.stringify(data)), 222)
+        // console.log(Code.decode(Code.encode(JSON.stringify(data))), 333)
+        // storageObj.setItem(name, JSON.stringify(data))
+        storageObj.setItem(name, Code.encode(JSON.stringify(data)))
     }
     let validateTime:any = (key: string) => {  
         let timeData = getData(globalName + ENDTIME)
@@ -225,6 +230,112 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
     init()    
     return O
 }
+
+
+const codeFactory:any = ()=>{
+    const code:any = [
+        ['a', '!'],
+        ['b', '1'],
+        ['c', '?'],
+        ['d', '0'],
+        ['e', '@'],
+        ['f', '2'],
+        ['g', '>'],
+        ['h', '9'],
+        ['i', '#'],
+        ['j', '3'],
+        ['k', '.'],
+        ['l', '8'],
+        ['m', '$'],
+        ['n', '4'],
+        ['o', '<'],
+        ['p', '7'],
+        ['q', '%'],
+        ['r', '5'],
+        ['s', ','],
+        ['t', '6'],
+        ['u', '&'],
+        ['v', ':'],
+        ['w', '*'],
+        ['x', ';'],
+        ['y', '('],
+        ['z', ']'],
+        ['!', 'b'],
+        ['@', 'f'],
+        ['#', 'm'],
+        ['$', 'c'],
+        ['%', 'o'],
+        ['&', 'r'],
+        ['*', 'u'],
+        ['(', 's'],
+        [')', 'd'],
+        ['-', 'x'],
+        ['_', 'g'],
+        ['+', 'l'],
+        ['=', 'y'],
+        ['{', 'k'],
+        ['}', 'w'],
+        ['[', 'j'],
+        [']', 'i'],
+        [';', 'p'],
+        [':', 't'],
+        [',', 'e'],
+        ['<', 'v'],
+        ['.', 'q'],
+        ['>', 'h'],
+        ['?', 'n'],
+        ['1', ')'],
+        ['2', '['],
+        ['3', '-'],
+        ['4', '}'],
+        ['5', 'z'],
+        ['6', '{'],
+        ['7', '+'],
+        ['8', '='],
+        ['9', 'a'],
+        ['0', '_'],
+    ];
+    const encode:any = (str:string)=>{
+        let result = '';
+        for(let i = 0, len = str.length; i < len; i++) {
+            let n = str[i];
+            for(let j = 0, len2 = code.length; j < len2; j++) {
+                let m = code[j];
+                if(m[0] === n) {
+                    result += m[1]
+                    break
+                }
+                if(j === len2 - 1 && m[0] !== n) {
+                    result += n
+                }
+            }
+        }
+        return result
+    };
+    const decode:any = (str:string)=>{
+        let result = '';
+        for(let i = 0, len = str.length; i < len; i++) {
+            let n = str[i];
+            for(let j = 0, len2 = code.length; j < len2; j++) {
+                let m = code[j];
+                if(m[1] === n) {
+                    result += m[0]
+                    break
+                }
+                if(j === len2 - 1 && m[1] !== n) {
+                    result += n
+                }
+            }
+        }
+        return result
+    }
+    return {
+        encode, decode
+    }
+}
+
+const Code:any = codeFactory()
+
 
 export default storageFactory
 

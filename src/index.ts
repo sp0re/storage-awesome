@@ -58,6 +58,7 @@ export interface factoryFunc {
 }
 
 const ENDTIME:string = '-_-endtime-_-'
+const KEY:string = '-_-sp0re-_-'
 
 const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage, globalName: string) => {
     if(!globalName) {
@@ -66,14 +67,11 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
     let getData:any = (name:string = globalName) => {
         // return JSON.parse(storageObj.getItem(name))
-        return JSON.parse(Code.decode(storageObj.getItem(name)))
+        return JSON.parse(Code.decode(storageObj.getItem(name), Code.getCode(storageObj.getItem(globalName + KEY))))
     }
     let setData:any = (data:any, name:string = globalName) => {
-        // console.log(JSON.stringify(data), 111)
-        // console.log(Code.encode(JSON.stringify(data)), 222)
-        // console.log(Code.decode(Code.encode(JSON.stringify(data))), 333)
         // storageObj.setItem(name, JSON.stringify(data))
-        storageObj.setItem(name, Code.encode(JSON.stringify(data)))
+        storageObj.setItem(name, Code.encode(JSON.stringify(data), Code.getCode(storageObj.getItem(globalName + KEY))))
     }
     let validateTime:any = (key: string) => {  
         let timeData = getData(globalName + ENDTIME)
@@ -110,6 +108,13 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
     let init:any = () => {
         !storageObj.getItem(globalName) && setData({})
         !storageObj.getItem(globalName + ENDTIME) && setData({}, globalName + ENDTIME)
+
+        if(!storageObj.getItem(globalName + KEY)) {
+            storageObj.setItem(globalName + KEY, Code.makeKey())
+            setData({})
+            setData({}, globalName + ENDTIME)
+        }
+
         checkTime()
     }
     let O: factoryReturn = {
@@ -233,69 +238,32 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
 
 
 const codeFactory:any = ()=>{
-    const code:any = [
-        ['a', '!'],
-        ['b', '1'],
-        ['c', '?'],
-        ['d', '0'],
-        ['e', '@'],
-        ['f', '2'],
-        ['g', '>'],
-        ['h', '9'],
-        ['i', '#'],
-        ['j', '3'],
-        ['k', '.'],
-        ['l', '8'],
-        ['m', '$'],
-        ['n', '4'],
-        ['o', '<'],
-        ['p', '7'],
-        ['q', '%'],
-        ['r', '5'],
-        ['s', ','],
-        ['t', '6'],
-        ['u', '&'],
-        ['v', ':'],
-        ['w', '*'],
-        ['x', ';'],
-        ['y', '('],
-        ['z', ']'],
-        ['!', 'b'],
-        ['@', 'f'],
-        ['#', 'm'],
-        ['$', 'c'],
-        ['%', 'o'],
-        ['&', 'r'],
-        ['*', 'u'],
-        ['(', 's'],
-        [')', 'd'],
-        ['-', 'x'],
-        ['_', 'g'],
-        ['+', 'l'],
-        ['=', 'y'],
-        ['{', 'k'],
-        ['}', 'w'],
-        ['[', 'j'],
-        [']', 'i'],
-        [';', 'p'],
-        [':', 't'],
-        [',', 'e'],
-        ['<', 'v'],
-        ['.', 'q'],
-        ['>', 'h'],
-        ['?', 'n'],
-        ['1', ')'],
-        ['2', '['],
-        ['3', '-'],
-        ['4', '}'],
-        ['5', 'z'],
-        ['6', '{'],
-        ['7', '+'],
-        ['8', '='],
-        ['9', 'a'],
-        ['0', '_'],
-    ];
-    const encode:any = (str:string)=>{
+    const _code:string = 'abcdefghijklmnopqrstuvwxyz!@#$%&*()-_+={}[];:,<.>?1234567890';
+
+    const makeKey:any = ()=>{
+        let _arr = [];
+        for(let i=0, len=_code.length; i<len; i++) {
+            let index = i.toString();
+            if(index.length === 1) {
+                index = '0' + index
+            }
+            _arr.push(index)
+        }
+        _arr.sort(() => Math.random() - 0.5);
+        return _arr.join('')
+    }
+    
+    const getCode:any = (key:string)=>{
+        let _arr = [];
+        for(let i=0, len=_code.length; i<len; i++) {
+            let n:string = _code[i];
+            let m:string = key[i*2] + key[i*2+1];
+            _arr.push([n, _code[Number(m)]])          
+        }
+        return _arr
+    }
+    
+    const encode:any = (str:string, code:any)=>{
         let result = '';
         for(let i = 0, len = str.length; i < len; i++) {
             let n = str[i];
@@ -312,7 +280,8 @@ const codeFactory:any = ()=>{
         }
         return result
     };
-    const decode:any = (str:string)=>{
+
+    const decode:any = (str:string, code:any)=>{
         let result = '';
         for(let i = 0, len = str.length; i < len; i++) {
             let n = str[i];
@@ -329,9 +298,8 @@ const codeFactory:any = ()=>{
         }
         return result
     }
-    return {
-        encode, decode
-    }
+
+    return { encode, decode, makeKey, getCode }
 }
 
 const Code:any = codeFactory()

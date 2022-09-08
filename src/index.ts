@@ -176,6 +176,7 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
         },
 
         set: (obj: { [key: string]: any }, minute?: number ) => {
+            checkTime();
             let data = {
                 ...getData(),
                 ...obj
@@ -192,6 +193,10 @@ const storageFactory: factoryFunc = (storageObj: Storage = window.sessionStorage
                     }
                     setData(result, globalName + ENDTIME)    
                 }, 0)                        
+            }else if(minute === 0) {
+                for(let key in obj) {
+                    deleteTime(key)
+                }
             }
             return O
         },

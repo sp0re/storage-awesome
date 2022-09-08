@@ -2,21 +2,24 @@
 **一个简单好用的storage方法库**
 
 
-## 开发背景：
-在开发中使用过localStorage和sessionStorage的朋友大概都会自己封装一套使用方法或者使用别人封装好的方法，而不是直接使用getItem、setItem这些原生api。
+## 特性：
+- API简洁，功能齐全【has、get、set、delete、clear、isEmpty】
+- 条件查询【SS.get((key, value)=> value > 700)】
+- 数据超时过期【SS.set({c: 789}, 60*24)】
+- 数据隔离，互不干扰【见下“基本使用”】
+- 基本的数据混淆，不明文存储
+- Typescript
 
-但是我在NPM上却没找到符合我使用习惯的封装库。一来可能是我检索的方法不对；二大概是因为每个人的理解不同，封装的结果也就不一样。
-
-于是打算自己封装一套。我的诉求很简单，就是api要足够简洁好记，而功能又足够全面。
 
 ## 功能简介：
-**storage-awesome** 的核心是一个工厂方法storageFactory，该方法接受两个入参，第一个入参是Storage对象，比如window.localStorage；第二个入参是字符串，对应localStorage的key，利用这一点可以实现不同的storage对象的作用域相互隔离的效果。
 
-工厂方法产出封装好的storage对象。这个对象有has、get、set、delete、clear五个方法，包含了常用的功能。其中set、delete、clear支持链式操作。给这些方法传入不同形式的参数产出也会不一样，以此满足不同的场景。
+**storage-awesome** 的核心是工厂方法storageFactory，该方法接受两个入参，第一入参是Storage对象，如window.localStorage；第二入参是用来标识各实例唯一性的name，不同name的storage实例数据互相隔离。
+
+工厂方法输出storage实例对象。实例对象有has、get、set、delete、clear、isEmpty几个方法，其中set、delete、clear支持链式操作。这些方法可以根据使用场景接收不同格式入参。
 
 基于工厂方法，**storage-awesome** 预设了SessionStorage和LocalStorage两个实例对象，可以直接使用。SS和LS是它们的简写。
 
-**storage-awesome** 支持超时逻辑，支持TS，支持IE11。storageFactory的第一个入参理论上支持传入所有实现了getItem和setItem方法（参考浏览器端的Storage）的对象，所以 **storage-awesome** 理论上支持所有JS运行环境。
+
 
 ```javascript
 /* 基本使用 */
@@ -31,7 +34,7 @@ SessionA.set({
 SessionB.set({
 	test: '456'
 })
-
+//// SessionA 和 SessionB 相互隔离
 SessionA.get('test') //'123'
 SessionB.get('test') //'456'
 
@@ -78,7 +81,7 @@ SS.has('abc');
 
 用 **script 标签** 引入：
 ```html
-<script src='https://unpkg.com/storage-awesome@1.0.0/dist/storage-awesome.min.js'></script>
+<script src='https://unpkg.com/storage-awesome@1.1.1/dist/storage-awesome.min.js'></script>
 ```
 ```javascript
 const {storageFactory, SessionStorage, LocalStorage, SS, LS} = storage;
@@ -90,8 +93,8 @@ storageFactory：
 
 入参（按顺序）          | 类型      | 是否必填              | 默认值
 ----------        | -----              | ------            | ------------
-Storage对象，可以是window.sessionStorage或者window.localStorage，或者其它实现了getItem和setItem方法的对象           | Storage       | 否   |  window.sessionStorage
-全局key名          | string    |否       | "storageAwesome"
+Storage对象，可以是window.sessionStorage或者window.localStorage，或者其它实现了getItem和setItem方法的对象           | Storage       | 是   |  window.sessionStorage
+全局唯一name         | string    |是       | "storageAwesome"
 
 实例方法：
 
@@ -213,14 +216,21 @@ Storage对象，可以是window.sessionStorage或者window.localStorage，或者
 
 
 ## 当前版本包大小（取自webpack打包数据）：
-min：3.84kb  
-gzip：1.43kb
+min：4.8KB  
+gzip：1.83KB
 
 
 ## TODO:
 - 优化除虫
-- 优化工厂方法storageFactory的使用，调整第二个入参逻辑
+- 完善测试
+- 完善数据混淆
 
 ## 更新日志：
 - **20210918（version 1.0.1）：**
 	* 实例方法新增isEmpty，用以判断该storage是否无数据。
+- **20220908（version 1.1.1）：**
+	* 加入简单的数据混淆
+	* 工厂函数入参改为必填
+	* 修复数据超时后isEmpty不准确的问题
+	* 优化重复set入同一个字段数据时的超时逻辑（重复set入的时候，如果之前的数据未超时且没有重新输入超时时间，则默认按原设定的超时时间；如想取消之前设定的超时时间，可传入超时时间为0）
+	* 优化readme和package.json

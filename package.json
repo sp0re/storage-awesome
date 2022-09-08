@@ -1,6 +1,6 @@
 {
   "name": "storage-awesome",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "一个简单好用的浏览器端storage方法库",
   "main": "dist/storage-awesome.min.js",
   "scripts": {
@@ -28,7 +28,11 @@
     "data",
     "存储",
     "前端存储",
-    "超时时间"
+    "数据超时",
+    "超时过期",
+    "数据混淆",
+    "数据隔离",
+    "条件查询"
   ],
   "author": "sp0re",
   "license": "MIT",
@@ -56,5 +60,8 @@
   "dependencies": {},
   "files": [
     "dist"
-  ]
+  ],
+  "engines" : { 
+		"node": "10.14.2"
+	}
 }

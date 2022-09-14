@@ -81,7 +81,7 @@ SS.has('abc');
 
 用 **script 标签** 引入：
 ```html
-<script src='https://unpkg.com/storage-awesome@1.1.1/dist/storage-awesome.min.js'></script>
+<script src='https://unpkg.com/storage-awesome@1.1.2/dist/storage-awesome.min.js'></script>
 ```
 ```javascript
 const {storageFactory, SessionStorage, LocalStorage, SS, LS} = storage;
@@ -234,3 +234,5 @@ gzip：1.83KB
 	* 修复数据超时后isEmpty不准确的问题
 	* 优化重复set入同一个字段数据时的超时逻辑（重复set入的时候，如果之前的数据未超时且没有重新输入超时时间，则默认按原设定的超时时间；如想取消之前设定的超时时间，可传入超时时间为0）
 	* 优化readme和package.json
+- **20220915（version 1.1.2）：**
+	* 把本组件的本地开发环境所需的node版本信息移出package.json
